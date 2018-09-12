@@ -9,7 +9,7 @@
     "pretest": "npm run build",
     "test": "npm run unit && npm run stryker",
     "unit": "nyc --reporter=html --report-dir=reports/coverage --check-coverage --lines 80 --functions 80 --branches 75 mocha \"test/**/*Spec.js\" --exit",
-    "posttest": "stryker run"
+    "stryker": "stryker run"
   },
   "keywords": [
     "NodeJS",
