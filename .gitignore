@@ -1,0 +1,27 @@
+# Operating system related files
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+
+# Intellij ide files
+.idea
+
+# Ignore environment file, use env.json.example instead
+config/env.json
+
+# Ignore package manager files
+node_modules/
+package-lock.json
+
+# Ignore everything related to test output
+reports
+.nyc_output
+
+# Ignore javascript files, sourcemaps and type declarations
+src/**/*.js
+test/**/*.js
+src/**/*.d.ts
+test/**/*.d.ts
+src/**/*.js.map
+test/**/*.js.map

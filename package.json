@@ -1,0 +1,46 @@
+{
+  "name": "node-inversify-example",
+  "version": "0.0.1",
+  "description": "An example for NodeJS in combination with Inversify",
+  "main": "bin/www",
+  "scripts": {
+    "tslint": "tslint --project tsconfig.json",
+    "build": "npm run tslint && tsc",
+    "pretest": "npm run build",
+    "test": "npm run unit && npm run stryker",
+    "unit": "nyc --reporter=html --report-dir=reports/coverage --check-coverage --lines 80 --functions 80 --branches 75 mocha \"test/**/*Spec.js\" --exit",
+    "posttest": "stryker run"
+  },
+  "keywords": [
+    "NodeJS",
+    "Typescript",
+    "Inversify"
+  ],
+  "author": "Sander Koenders",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/chai": "^4.1.4",
+    "@types/express": "^4.16.0",
+    "@types/mocha": "^5.2.5",
+    "@types/sinon": "^5.0.2",
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0",
+    "nyc": "^13.0.1",
+    "sinon": "^6.2.0",
+    "source-map-support": "^0.5.9",
+    "stryker": "^0.29.1",
+    "stryker-api": "^0.21.0",
+    "stryker-html-reporter": "^0.16.1",
+    "stryker-mocha-framework": "^0.12.1",
+    "stryker-mocha-runner": "^0.14.1",
+    "stryker-typescript": "^0.13.2",
+    "tslint": "^5.11.0",
+    "typescript": "^3.0.3"
+  },
+  "dependencies": {
+    "express": "^4.15.2",
+    "reflect-metadata": "^0.1.12",
+    "inversify": "^4.13.0",
+    "inversify-binding-decorators": "^4.0.0"
+  }
+}

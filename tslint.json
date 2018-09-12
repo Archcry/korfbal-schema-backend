@@ -1,0 +1,15 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "rules": {
+      "quotemark": [true, "single"],
+      "trailing-comma": false,
+      "ordered-imports": false,
+      "arrow-parens": false,
+      "interface-name": false,
+      "object-literal-sort-keys": false
+    },
+    "rulesDirectory": []
+}
