@@ -5,6 +5,7 @@ export interface Match {
   homeTeam: Team;
   awayTeam: Team;
   dateTime: Moment;
+  facility: Facility;
 }
 
 export interface Team {
