@@ -1,6 +1,3 @@
 interface Environment {
-  port: number;
-  loadPaths: string[];
-
-  knkvApiKey: string;
+  [key: string]: any;
 }
