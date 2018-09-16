@@ -40,12 +40,6 @@ describe('MatchInfoProvider', () => {
     assert(fsStub.readFile.calledWith(expectedPath), `readdir should\'ve been called with ${expectedPath}`);
   });
 
-  it('should fetch match information using the match api', async () => {
-    await subjectUnderTest.getMatchesForTeam(teamId);
-
-    assert(matchApiStub.getMatchesForTeam.calledWith(teamId), `matchApi not called with teamId: "${teamId}"`);
-  });
-
   it('should throw an error when the requested file could not be resolved', async () => {
     const expectedPath = path.resolve(fakeEnvironment.projectRoot, fakeEnvironment.driveAndWashSchemaLocation);
     const fsReadFileError = `ENOENT: no such file or directory, open '${expectedPath}'`;
@@ -58,6 +52,12 @@ describe('MatchInfoProvider', () => {
     } catch (err) {
       expect(err.message).to.equal(`Error while trying to provide matches: ${fsReadFileError}`);
     }
+  });
+
+  it('should fetch match information using the match api', async () => {
+    await subjectUnderTest.getMatchesForTeam(teamId);
+
+    assert(matchApiStub.getMatchesForTeam.calledWith(teamId), `matchApi not called with teamId: "${teamId}"`);
   });
 
   it('should combine the fetched data in an CombinedMatchInfo object');
