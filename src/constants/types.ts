@@ -3,7 +3,8 @@ const TYPES = {
     Logger: Symbol('Logger'),
     Console: Symbol('Console'),
 
-    MatchApi: Symbol('MatchApi')
+    MatchApi: Symbol('MatchApi'),
+    DutySchemaApi: Symbol('DutySchemaApi')
 };
 
 export default TYPES;
