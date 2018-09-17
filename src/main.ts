@@ -1,5 +1,5 @@
 import * as express from 'express';
-import IocContext from './ioc/ioc';
+import IocContext from './ioc/iocContext';
 import * as path from 'path';
 import TYPES from './constants/types';
 
