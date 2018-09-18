@@ -7,9 +7,6 @@
 # Intellij ide files
 .idea
 
-# Ignore environment file, use env.json.example instead
-config/env.json
-
 # Ignore package manager files
 node_modules/
 package-lock.json
