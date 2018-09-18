@@ -1,7 +1,7 @@
 import * as sinon from 'sinon';
 import * as fs from 'fs';
 import * as path from 'path';
-import IocContext from '../../../src/ioc/ioc';
+import IocContext from '../../../src/ioc/iocContext';
 import { assert, expect } from 'chai';
 import { ContainerModule } from 'inversify';
 
