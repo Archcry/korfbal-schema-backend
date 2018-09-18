@@ -53,7 +53,7 @@ class Main {
     this.app.use((request, response, next) => {
       const origin = request.headers.origin as string;
 
-      if (this.environment.corsAllowedOrigins.indexOf(origin)) {
+      if (this.environment.corsAllowedOrigins.indexOf(origin) !== -1) {
         response.header('Access-Control-Allow-Origin', origin);
       }
 
