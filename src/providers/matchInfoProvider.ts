@@ -3,7 +3,9 @@ import TYPES from '../constants/types';
 import MatchApi, { MatchApiResponseEntry } from '../services/matchApi/matchApi';
 import DutySchemaApi, { DutySchemaApiResponseEntry } from '../services/dutySchemaApi/dutySchemeApi';
 import { Moment } from 'moment';
+import { provide } from '../ioc/iocUtils';
 
+@provide(TYPES.MatchProvider)
 export default class MatchInfoProvider {
   constructor(
     @inject(TYPES.MatchApi) private matchApi: MatchApi,

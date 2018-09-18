@@ -4,7 +4,8 @@ const TYPES = {
     Console: Symbol('Console'),
 
     MatchApi: Symbol('MatchApi'),
-    DutySchemaApi: Symbol('DutySchemaApi')
+    DutySchemaApi: Symbol('DutySchemaApi'),
+    MatchProvider: Symbol('MatchProvider')
 };
 
 export default TYPES;
