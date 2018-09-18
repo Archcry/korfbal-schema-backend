@@ -74,10 +74,6 @@ describe('MatchInfoProvider', () => {
       }
     ]);
   });
-
-  it('should throw an error when the matchApi cannot resolve match entries');
-
-  it('should throw an error when the dutySchemaApi cannot resolve the dutySchema entries');
 });
 
 const matchApiFakeResponse: MatchApiResponseEntry[] = [
