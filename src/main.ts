@@ -2,6 +2,8 @@ import * as express from 'express';
 import IocContext from './ioc/iocContext';
 import * as path from 'path';
 import TYPES from './constants/types';
+import DutySchemaApi from './services/dutySchemaApi/dutySchemeApi';
+import FsDutySchemaApi from './services/dutySchemaApi/fsDutySchemaApi';
 
 class Main {
   private app: express.Application;
@@ -10,8 +12,11 @@ class Main {
 
   public constructor(environment: Environment) {
     this.app = express();
+
+    environment.projectRoot = path.resolve(__dirname, '..');
     this.environment = environment;
-    this.iocContext = new IocContext(path.resolve(__dirname, '..'));
+
+    this.iocContext = new IocContext(environment.projectRoot);
   }
 
   public async initialize() {
@@ -22,6 +27,10 @@ class Main {
     // Bind dependencies to the container
     container.bind<Environment>(TYPES.Environment).toConstantValue(this.environment);
     container.bind(TYPES.Console).toConstantValue(global.console);
+
+    // Initialize duty schema api and add it to the ioc container
+    const dutySchemaLocation = path.resolve(this.environment.projectRoot, this.environment.dutySchemaLocation);
+    container.bind<DutySchemaApi>(TYPES.DutySchemaApi).toConstantValue(new FsDutySchemaApi(dutySchemaLocation));
   }
 
   public onListening() {
