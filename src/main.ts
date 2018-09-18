@@ -20,6 +20,8 @@ class Main {
     this.environment = environment;
 
     this.iocContext = new IocContext(environment.projectRoot);
+
+    this.configureCorsMiddleware();
   }
 
   public async initialize() {
@@ -42,10 +44,23 @@ class Main {
   public onListening() {
     const matchProvider = this.iocContext.getContainer().get<MatchInfoProvider>(TYPES.MatchProvider);
 
-    this.app.get('/matches', async (request, response) => {
-      if (request) {
-        response.send(await matchProvider.getMatchesForTeam(this.environment.teamId));
+    this.app.get('/matches', async (_request, response) => {
+      response.send(await matchProvider.getMatchesForTeam(this.environment.teamId));
+    });
+  }
+
+  private configureCorsMiddleware() {
+    this.app.use((request, response, next) => {
+      const origin = request.headers.origin as string;
+
+      if (this.environment.corsAllowedOrigins.indexOf(origin)) {
+        response.header('Access-Control-Allow-Origin', origin);
       }
+
+      response.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+      response.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+
+      next();
     });
   }
 
