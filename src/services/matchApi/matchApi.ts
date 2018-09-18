@@ -12,12 +12,12 @@ export interface MatchApiResponseEntry {
   facility: Facility;
 }
 
-interface Team {
+export interface Team {
   id: number;
   name: string;
 }
 
-interface Facility {
+export interface Facility {
   name: string;
   address: string;
   zipCode: string;

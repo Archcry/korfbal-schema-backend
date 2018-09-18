@@ -1,5 +1,4 @@
-import MatchApi from './matchApi';
-import { Match, Team, Facility } from '../../entities';
+import MatchApi, { MatchApiResponseEntry, Team, Facility } from './matchApi';
 import fetch from 'node-fetch';
 import * as moment from 'moment';
 
@@ -9,7 +8,7 @@ export default class KnkvApi implements MatchApi {
     private apiUrl: string = 'https://www2.knkv.nl/kcp'
   ) { }
 
-  public async getMatchesForTeam(teamId: number): Promise<Match[]> {
+  public async getMatchesForTeam(teamId: number): Promise<MatchApiResponseEntry[]> {
     try {
       const responseBody = await this.fetchData(teamId);
 
@@ -38,7 +37,7 @@ export default class KnkvApi implements MatchApi {
   }
 
   private processResponse(responseBody: any) {
-    const matches: Match[] = [];
+    const matches: MatchApiResponseEntry[] = [];
 
     for (const key in responseBody) {
       if (responseBody.hasOwnProperty(key)) {
@@ -51,7 +50,7 @@ export default class KnkvApi implements MatchApi {
     return matches;
   }
 
-  private createMatch(item: any): Match {
+  private createMatch(item: any): MatchApiResponseEntry {
     return {
       id: parseInt(item.game_id, 10),
       homeTeam: this.createTeam(item.home_team_id, item.home_team_name),
