@@ -1,6 +1,6 @@
 import MatchApi, { MatchApiResponseEntry, Team, Facility } from './matchApi';
 import fetch from 'node-fetch';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
 
 export default class KnkvApi implements MatchApi {
   public constructor(
@@ -56,7 +56,7 @@ export default class KnkvApi implements MatchApi {
       homeTeam: this.createTeam(item.home_team_id, item.home_team_name),
       awayTeam: this.createTeam(item.away_team_id, item.away_team_name),
       facility: this.createFacility(item.facility),
-      dateTime: moment(`${item.date} ${item.time}`)
+      dateTime: moment.tz(`${item.date} ${item.time}`, 'Europe/Amsterdam')
     };
   }
 

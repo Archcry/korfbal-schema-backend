@@ -5,7 +5,7 @@ import * as fetch from 'node-fetch';
 import { assert, expect } from 'chai';
 import knkvSampleResponse from './knkvSampleResponse';
 import customSinonMatchers from '../../helpers/customSinonMatchers';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
 
 describe('Knkv Api', () => {
   const sandbox = sinon.createSandbox();
@@ -82,14 +82,14 @@ describe('Knkv Api', () => {
         homeTeam: { id: 12723, name: 'Aladna/De Issel 1' },
         awayTeam: { id: 13879, name: 'Zwaluwen 4' },
         facility: { name: 'Sportpark Zuid', address: 'Bocholtsestraatweg 67 a', zipCode: '7121JB', city: 'Aalten' },
-        dateTime: moment('2018-09-16 13:00')
+        dateTime: moment.tz('2018-09-16 13:00', 'Europe/Amsterdam')
       },
       {
         id: 22831,
         homeTeam: { id: 13879, name: 'Zwaluwen 4' },
         awayTeam: { id: 13582, name: 'Olympus \'58 3' },
         facility: { name: 'Sportpark Hengelder', address: 'Marconistraat 18', zipCode: '6902PC', city: 'Zevenaar' },
-        dateTime: moment('2018-10-14 13:00')
+        dateTime: moment.tz('2018-10-14 13:00', 'Europe/Amsterdam')
       }
     ]);
   });
