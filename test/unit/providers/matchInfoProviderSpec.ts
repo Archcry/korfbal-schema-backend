@@ -53,7 +53,7 @@ describe('MatchInfoProvider', () => {
         homeTeam: { id: 12723, name: 'Aladna/De Issel 1' },
         awayTeam: { id: 13879, name: 'Zwaluwen 4' },
         facility: { name: 'Sportpark Zuid', address: 'Bocholtsestraatweg 67 a', zipCode: '7121JB', city: 'Aalten' },
-        dateTime: moment('2018-09-16 13:00'),
+        timestamp: moment('2018-09-16 13:00').unix(),
         dutySchema:   {
           gameId: 25740,
           drive: ['Carl', 'Jane'],
@@ -65,7 +65,7 @@ describe('MatchInfoProvider', () => {
         homeTeam: { id: 44345, name: 'Diderna/Visser Sloopwerken 3' },
         awayTeam: { id: 13879, name: 'Zwaluwen 4' },
         facility: { name: 'Het Nieuwland', address: 'Kolonieweg 2', zipCode: '6952GX', city: 'Dieren' },
-        dateTime: moment('2018-10-21 13:00'),
+        timestamp: moment('2018-10-21 13:00').unix(),
         dutySchema: {
           gameId: 22831,
           drive: ['Sarah', 'Wren'],

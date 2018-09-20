@@ -2,7 +2,6 @@ import { inject } from 'inversify';
 import TYPES from '../constants/types';
 import MatchApi, { MatchApiResponseEntry } from '../services/matchApi/matchApi';
 import DutySchemaApi, { DutySchemaApiResponseEntry } from '../services/dutySchemaApi/dutySchemeApi';
-import { Moment } from 'moment';
 import { provide } from '../ioc/iocUtils';
 
 @provide(TYPES.MatchProvider)
@@ -34,7 +33,7 @@ export default class MatchInfoProvider {
       id: matchEntry.id,
       homeTeam: matchEntry.homeTeam,
       awayTeam: matchEntry.awayTeam,
-      dateTime: matchEntry.dateTime,
+      timestamp: matchEntry.dateTime.unix(),
       facility: matchEntry.facility,
       dutySchema: dutySchemaEntry
     };
@@ -45,7 +44,7 @@ export interface Match {
   id: number;
   homeTeam: Team;
   awayTeam: Team;
-  dateTime: Moment;
+  timestamp: number;
   facility: Facility;
   dutySchema: DutySchema;
 }
