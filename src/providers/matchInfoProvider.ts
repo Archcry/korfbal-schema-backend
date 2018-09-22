@@ -14,16 +14,14 @@ export default class MatchInfoProvider {
   ) { }
 
   public async getMatchesForTeam(teamId: number): Promise<Match[]> {
-    const matches = this.cache.get<Match[]>('MatchInfoProvider.matches', () => this.fetchMatchesForTeam(teamId));
+    const matches = this.cache.get<Match[]>('MatchInfoProvider.matches', async () => {
+      const matchEntries = await this.matchApi.getMatchesForTeam(teamId);
+      const dutySchemaEntries = await this.dutySchemaApi.getDutySchemaEntries();
+
+      return this.combineResults(matchEntries, dutySchemaEntries);
+    });
 
     return matches;
-  }
-
-  private async fetchMatchesForTeam(teamId: number) {
-    const matchEntries = await this.matchApi.getMatchesForTeam(teamId);
-    const dutySchemaEntries = await this.dutySchemaApi.getDutySchemaEntries();
-
-    return this.combineResults(matchEntries, dutySchemaEntries);
   }
 
   private combineResults(matchEntries: MatchApiResponseEntry[], dutySchemaEntries: DutySchemaApiResponseEntry[]) {
