@@ -6,7 +6,7 @@ export default class Cache {
     private nodeCache: NodeCache = new NodeCache()
   ) { }
 
-  public async get<T>(key: string, storeMethod: () => T): Promise<T> {
+  public async get<T>(key: string, storeMethod: () => Promise<T> | T): Promise<T> {
     let value = this.nodeCache.get(key) as T;
 
     if (!value) {
