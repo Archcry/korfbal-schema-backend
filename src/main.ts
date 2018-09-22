@@ -7,6 +7,7 @@ import FsDutySchemaApi from './services/dutySchemaApi/fsDutySchemaApi';
 import MatchInfoProvider from './providers/matchInfoProvider';
 import KnkvApi from './services/matchApi/knkvApi';
 import MatchApi from './services/matchApi/matchApi';
+import Cache from './libraries/caching/cache';
 
 class Main {
   private app: express.Application;
@@ -39,6 +40,9 @@ class Main {
     // Initialize duty schema api and add it to the ioc container
     const dutySchemaLocation = path.resolve(this.environment.projectRoot, this.environment.dutySchemaLocation);
     container.bind<DutySchemaApi>(TYPES.DutySchemaApi).toConstantValue(new FsDutySchemaApi(dutySchemaLocation));
+
+    // Initialize cache and add it to the ioc container
+    container.bind<Cache>(TYPES.Cache).toConstantValue(new Cache(3600));
   }
 
   public onListening() {
