@@ -42,7 +42,7 @@ class Main {
     container.bind<DutySchemaApi>(TYPES.DutySchemaApi).toConstantValue(new FsDutySchemaApi(dutySchemaLocation));
 
     // Initialize cache and add it to the ioc container
-    container.bind<Cache>(TYPES.Cache).toConstantValue(new Cache(3600));
+    container.bind<Cache>(TYPES.Cache).toConstantValue(new Cache(this.environment.cacheTtl));
   }
 
   public onListening() {
