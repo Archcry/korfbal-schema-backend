@@ -49,6 +49,10 @@ describe('MatchInfoProvider', () => {
     assert(dutySchemaApiStub.getDutySchemaEntries.called, 'dutySchemaApi.getDutySchemaEntries should\'ve been called');
   });
 
+  it('should fetch travelinformation based on a fixed from address');
+
+  it('should only fetch travel information for matches that are not played at home');
+
   it('should use the cache to retrieve matches', async () => {
     await subjectUnderTest.getMatchesForTeam(teamId);
 
