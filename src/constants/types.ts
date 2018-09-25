@@ -6,7 +6,8 @@ const TYPES = {
 
     MatchApi: Symbol('MatchApi'),
     DutySchemaApi: Symbol('DutySchemaApi'),
-    MatchProvider: Symbol('MatchProvider')
+    MatchProvider: Symbol('MatchProvider'),
+    TravelApi: Symbol('TravelApi')
 };
 
 export default TYPES;
