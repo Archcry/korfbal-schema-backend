@@ -12,6 +12,6 @@ export interface Location {
 export interface TravelApiResponseEntry {
   fromLocation: Location;
   toLocation: Location;
-  distace: number;
+  distance: number;
   duration: number;
 }
