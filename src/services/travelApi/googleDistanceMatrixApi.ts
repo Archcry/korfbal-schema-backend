@@ -10,23 +10,12 @@ export default class GoogleDistanceMatrixApi implements TravelApi {
 
   public async getTravelInfo(from: Location, to: Location, arrivalTime: number): Promise<TravelApiResponseEntry> {
     try {
-      const fromString = this.createStringLocation(from);
-      const destinationString = this.createStringLocation(to);
+      const resourceUrl = this.createRequestUrl(this.createStringLocation(from), this.createStringLocation(to));
 
-      const departureTime = await this.determineDepartureTime(fromString, destinationString, arrivalTime);
+      const departureTime = await this.determineDepartureTime(resourceUrl, arrivalTime);
+      const result = await this.fetchTravelInfo(resourceUrl, departureTime);
 
-      const url = this.createRequestUrl(fromString, destinationString).concat(`&departure_time=${departureTime}`);
-      const result = await fetch(url).then(response => response.json());
-
-      const element = result.rows[0].elements[0];
-      const duration = (element.duration_in_traffic) ? element.duration_in_traffic.value : element.duration.value;
-
-      return {
-        fromLocation: from,
-        toLocation: to,
-        distance: result.rows[0].elements[0].distance.value,
-        duration
-      };
+      return this.createTravelApiResponseEntry(from, to, result.distance, result.duration);
     } catch (err) {
       throw new Error(`Could not fetch travel information: ${err}`);
     }
@@ -46,11 +35,33 @@ export default class GoogleDistanceMatrixApi implements TravelApi {
     return url;
   }
 
-  private async determineDepartureTime(fromString: string, destinationString: string, arrivalTime: number) {
-    const url = this.createRequestUrl(fromString, destinationString).concat(`&arrival_time=${arrivalTime}`);
-    const result = await fetch(url).then(response => response.json());
+  private async determineDepartureTime(resourceUrl: string, arrivalTime: number) {
+    const element = await this.fetchDistanceMatrix(resourceUrl.concat(`&arrival_time=${arrivalTime}`));
 
-    // We expect only one result from this query therefore we take the first row and first element
-    return arrivalTime - result.rows[0].elements[0].duration.value;
+    return arrivalTime - element.duration.value;
+  }
+
+  private async fetchTravelInfo(resourceUrl: string, departureTime: number) {
+    const element = await this.fetchDistanceMatrix(resourceUrl.concat(`&departure_time=${departureTime}`));
+
+    return {
+      duration: (element.duration_in_traffic) ? element.duration_in_traffic.value : element.duration.value,
+      distance: element.distance.value
+    };
+  }
+
+  private async fetchDistanceMatrix(resource: string) {
+    return await fetch(resource)
+      .then(response => response.json())
+      .then(responseObj => responseObj.rows[0].elements[0]);
+  }
+
+  private createTravelApiResponseEntry(from: Location, to: Location, distance: number, duration: number) {
+    return {
+      fromLocation: from,
+      toLocation: to,
+      distance,
+      duration
+    };
   }
 }
