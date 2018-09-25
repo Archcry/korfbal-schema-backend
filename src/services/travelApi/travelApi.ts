@@ -1,9 +1,8 @@
 export default interface TravelApi {
-  getDistance(from: Location, to: Location, arrivalTime: number): Promise<TravelApiResponseEntry>;
+  getTravelInfo(from: Location, to: Location, arrivalTime: number): Promise<TravelApiResponseEntry>;
 }
 
 export interface Location {
-  serialNumber: number;
   address: string;
   zipCode: string;
   city: string;
