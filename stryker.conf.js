@@ -8,7 +8,7 @@ module.exports = function(config) {
     testFramework: "mocha",
     coverageAnalysis: "perTest",
     tsconfigFile: "tsconfig.json",
-    mutate: ["src/**/*.ts"],
+    mutate: ["src/**/*.ts", "!src/constants/*.ts"],
     coverageAnalysis: "off"
   });
 };
