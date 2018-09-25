@@ -1,76 +1,52 @@
-export default `{
+export const travelResponseWithoutTraffic = (distance: number, duration: number) => `{
   "destination_addresses": [
-      "Arnhem, Netherlands",
-      "Westervoort, Netherlands"
+      "Kolonieweg 2, 6952 GX Dieren, Netherlands"
   ],
   "origin_addresses": [
-      "Zevenaar, Netherlands",
-      "Duiven, Netherlands"
+      "Marconistraat 18, 6902 PC Zevenaar, Netherlands"
+  ],
+  "rows": [
+      {
+          "elements": [
+                  {
+                    "distance": {
+                      "text": "${Math.floor(distance / 1000)}",
+                      "value": ${distance}
+                  },
+                  "duration": {
+                      "text": "${Math.floor(duration / 60)} mins",
+                      "value": ${duration}
+                  },
+                  "status": "OK"
+              }
+          ]
+      }
+  ],
+  "status": "OK"
+}`;
+
+export const travelResponseWithTraffic = (distance: number, duration: number) => `{
+  "destination_addresses": [
+      "Kolonieweg 2, 6952 GX Dieren, Netherlands"
+  ],
+  "origin_addresses": [
+      "Marconistraat 18, 6902 PC Zevenaar, Netherlands"
   ],
   "rows": [
       {
           "elements": [
               {
                   "distance": {
-                      "text": "20.7 km",
-                      "value": 20711
+                      "text": "${Math.floor(distance / 1000)}",
+                      "value": ${distance}
                   },
                   "duration": {
-                      "text": "22 mins",
-                      "value": 1343
+                      "text": "${Math.floor(duration / 60)} mins",
+                      "value": ${duration}
                   },
                   "duration_in_traffic": {
-                      "text": "21 mins",
-                      "value": 1262
-                  },
-                  "status": "OK"
-              },
-              {
-                  "distance": {
-                      "text": "10.9 km",
-                      "value": 10875
-                  },
-                  "duration": {
-                      "text": "12 mins",
-                      "value": 744
-                  },
-                  "duration_in_traffic": {
-                      "text": "12 mins",
-                      "value": 698
-                  },
-                  "status": "OK"
-              }
-          ]
-      },
-      {
-          "elements": [
-              {
-                  "distance": {
-                      "text": "10.8 km",
-                      "value": 10806
-                  },
-                  "duration": {
-                      "text": "21 mins",
-                      "value": 1272
-                  },
-                  "duration_in_traffic": {
-                      "text": "20 mins",
-                      "value": 1194
-                  },
-                  "status": "OK"
-              },
-              {
-                  "distance": {
-                      "text": "4.2 km",
-                      "value": 4240
-                  },
-                  "duration": {
-                      "text": "8 mins",
-                      "value": 463
-                  },
-                  "duration_in_traffic": {
-                      "text": "8 mins",
-                      "value": 458
+                      "text": "${Math.floor((duration + 300) / 60)}",
+                      "value": ${duration + 300}
                   },
                   "status": "OK"
               }
