@@ -10,7 +10,14 @@ describe('GoogleDistanceMatrixApi', () => {
   const sandbox = sinon.createSandbox();
   const apiUrl = 'https://maps.googleapis.com/maps/api/distancematrix/json';
   const apiKey = 'AIzaSyBACMTtJB2ha-Ubr7-bDF1z80t2p09YbRA';
-  const travelTime = 1621;
+
+  // Some random values, don't worry about it
+  const arrivalTime = 1537894245;
+  const travelDuration = 1621;
+  const travelDistance = 22043;
+  const extraTravelDuration = 300;
+  const fromLocation = { city: 'Zevenaar', address: 'Marconistraat 18', zipCode: '6902 PC', country: 'Netherlands' };
+  const toLocation = { city: 'Dieren', address: 'Kolonieweg 2', zipCode: '6952 GX', country: 'Netherlands' };
 
   let fetchStub: sinon.SinonStub;
 
@@ -20,10 +27,13 @@ describe('GoogleDistanceMatrixApi', () => {
     fetchStub = sandbox.stub(fetch, 'default');
 
     fetchStub.onCall(0).returns(Promise.resolve({
-      json: () => Promise.resolve(JSON.parse(travelResponseWithoutTraffic(22043, travelTime)))
+      json: () => Promise.resolve(JSON.parse(travelResponseWithoutTraffic(travelDistance, travelDuration)))
     }));
+
     fetchStub.onCall(1).returns(Promise.resolve({
-      json: () => Promise.resolve(JSON.parse(travelResponseWithTraffic(22043, travelTime)))
+      json: () => Promise.resolve(JSON.parse(
+        travelResponseWithTraffic(travelDistance, travelDuration, extraTravelDuration)
+      ))
     }));
 
     subjectUnderTest = new GoogleDistanceMatrixApi(apiKey);
@@ -32,90 +42,91 @@ describe('GoogleDistanceMatrixApi', () => {
   afterEach(() => sandbox.restore());
 
   it('should call fetch twice, once to get the departure time and once to get the actual info', async () => {
-    await subjectUnderTest.getTravelInfo(createLocation('Zevenaar'), createLocation('Arnhem'), 10256);
+    await subjectUnderTest.getTravelInfo(fromLocation, toLocation, arrivalTime);
 
     assert(fetchStub.calledTwice);
   });
 
   it('should use the correct google matrix api url in order to fetch data', async () => {
-    await (subjectUnderTest.getTravelInfo(createLocation('Zevenaar'), createLocation('Arnhem'), 10256));
+    await subjectUnderTest.getTravelInfo(fromLocation, toLocation, arrivalTime);
 
     const matcher = customSinonMatchers.string.contains(apiUrl);
     assert(fetchStub.alwaysCalledWith(matcher), 'should be called with the correct url');
   });
 
   it('should include the api key in the request to the google distance matrix api', async () => {
-    await subjectUnderTest.getTravelInfo(createLocation('Zevenaar'), createLocation('Arnhem'), 10256);
+    await subjectUnderTest.getTravelInfo(fromLocation, toLocation, arrivalTime);
 
-    const matcher = customSinonMatchers.string.contains(apiKey);
+    const matcher = customSinonMatchers.string.contains(`?key=${apiKey}`);
     assert(fetchStub.alwaysCalledWith(matcher), 'should call fetch with the api key');
   });
 
   it('should include the from location in the request to the google distance matrix api', async () => {
-    await subjectUnderTest.getTravelInfo(
-      createLocation('Zevenaar', 'Marconistraat 18', '6902 PC', 'Netherlands'),
-      createLocation('Arnhem'),
-      10256
-    );
+    await subjectUnderTest.getTravelInfo(fromLocation, toLocation, arrivalTime);
 
-    const matcher = customSinonMatchers.string.contains('origins=Marconistraat 18, 6902 PC Zevenaar, Netherlands');
+    const matcher = customSinonMatchers.string.contains('&origins=Marconistraat 18, 6902 PC Zevenaar, Netherlands');
     assert(fetchStub.alwaysCalledWith(matcher), 'all calls to the api should include the origin');
   });
 
   it('should include the to location in the request to the google distance matrix api', async () => {
-    await subjectUnderTest.getTravelInfo(
-      createLocation('Arnhem'),
-      createLocation('Dieren', 'Kolonieweg 2', '6952 GX', 'Netherlands'),
-      10256
-    );
+    await subjectUnderTest.getTravelInfo(fromLocation, toLocation, arrivalTime);
 
-    const matcher = customSinonMatchers.string.contains('destinations=Kolonieweg 2, 6952 GX Dieren, Netherlands');
+    const matcher = customSinonMatchers.string.contains('&destinations=Kolonieweg 2, 6952 GX Dieren, Netherlands');
     assert(fetchStub.alwaysCalledWith(matcher), 'all calls to the api should include the destination');
   });
 
   it('should call fetch once with the arrival time as query parameter', async () => {
-    const arrivalTime = 16468466;
-    await subjectUnderTest.getTravelInfo(
-      createLocation('Arnhem'),
-      createLocation('Dieren', 'Kolonieweg 2', '6952 GX', 'Netherlands'),
-      arrivalTime
-    );
+    await subjectUnderTest.getTravelInfo(fromLocation, toLocation, arrivalTime);
 
-    const matcher = customSinonMatchers.string.contains(`arrival_time=${arrivalTime}`);
+    const matcher = customSinonMatchers.string.contains(`&arrival_time=${arrivalTime}`);
     assert(fetchStub.firstCall.calledWith(matcher), 'the first call to the api should include the arrival time');
   });
 
   it('should call fetch once with departure time, based on the previous result, as query parameter', async () => {
-    const arrivalTime = 16468466;
+    await subjectUnderTest.getTravelInfo(fromLocation, toLocation, arrivalTime);
 
-    await subjectUnderTest.getTravelInfo(
-      createLocation('Arnhem'),
-      createLocation('Dieren', 'Kolonieweg 2', '6952 GX', 'Netherlands'),
-      arrivalTime
-    );
-
-    const expectedDepartureTime = arrivalTime - travelTime;
-    const matcher = customSinonMatchers.string.contains(`departure_time=${expectedDepartureTime}`);
+    const expectedDepartureTime = arrivalTime - travelDuration;
+    const matcher = customSinonMatchers.string.contains(`&departure_time=${expectedDepartureTime}`);
     assert(fetchStub.secondCall.calledWith(matcher), 'api should\'ve been called with the calculated departureTime');
   });
 
-  it('should send a response with the distance, duration aswell as the from and to location', async () => {
-    const arrivalTime = 514754164;
+  it('should throw an error when something went wrong', async () => {
+    const fetchError = 'fetch error';
+    const expectedError = `Could not fetch travel information: ${fetchError}`;
+    fetchStub.onCall(0).returns(Promise.reject(fetchError));
 
-    const result = await subjectUnderTest.getTravelInfo(
-      createLocation('Arnhem'),
-      createLocation('Dieren', 'Kolonieweg 2', '6952 GX', 'Netherlands'),
-      arrivalTime
-    );
+    try {
+      await subjectUnderTest.getTravelInfo(fromLocation, toLocation, arrivalTime);
 
-    expect(result);
-    assert(false, 'Not implemented');
+      assert(false, 'subjectUnderTest.getTravelInfo should throw an error');
+    } catch (err) {
+      expect(err.message).to.equal(expectedError);
+    }
   });
-});
 
-const createLocation = (city: string, address = '', zipCode = '', country = '') => ({
-  address,
-  zipCode,
-  city,
-  country
+  it('should send a response with the distance, duration aswell as the from and to location', async () => {
+    const result = await subjectUnderTest.getTravelInfo(fromLocation, toLocation, arrivalTime);
+
+    expect(result).to.deep.equal({
+      fromLocation,
+      toLocation,
+      distance: travelDistance,
+      duration: travelDuration + extraTravelDuration
+    });
+  });
+
+  it('should use distance instead of distance_in_traffic when the latter is not present', async () => {
+    fetchStub.onCall(1).returns(Promise.resolve({
+      json: () => Promise.resolve(JSON.parse(travelResponseWithoutTraffic(travelDistance, travelDuration)))
+    }));
+
+    const result = await subjectUnderTest.getTravelInfo(fromLocation, toLocation, arrivalTime);
+
+    expect(result).to.deep.equal({
+      fromLocation,
+      toLocation,
+      distance: travelDistance,
+      duration: travelDuration
+    });
+  });
 });

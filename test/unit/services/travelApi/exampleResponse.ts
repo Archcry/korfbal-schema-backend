@@ -25,7 +25,7 @@ export const travelResponseWithoutTraffic = (distance: number, duration: number)
   "status": "OK"
 }`;
 
-export const travelResponseWithTraffic = (distance: number, duration: number) => `{
+export const travelResponseWithTraffic = (distance: number, duration: number, extraTravelDuration: number) => `{
   "destination_addresses": [
       "Kolonieweg 2, 6952 GX Dieren, Netherlands"
   ],
@@ -45,7 +45,7 @@ export const travelResponseWithTraffic = (distance: number, duration: number) =>
                       "value": ${duration}
                   },
                   "duration_in_traffic": {
-                      "text": "${Math.floor((duration + 300) / 60)}",
+                      "text": "${Math.floor((duration + extraTravelDuration) / 60)}",
                       "value": ${duration + 300}
                   },
                   "status": "OK"
