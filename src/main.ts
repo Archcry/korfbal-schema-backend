@@ -8,6 +8,8 @@ import KnkvApi from './services/matchApi/knkvApi';
 import MatchApi from './services/matchApi/matchApi';
 import Cache from './libraries/caching/cache';
 import MatchController from './controllers/matchController';
+import TravelApi from './services/travelApi/travelApi';
+import GoogleDistanceMatrixApi from './services/travelApi/googleDistanceMatrixApi';
 
 class Main {
   private app: express.Application;
@@ -40,6 +42,9 @@ class Main {
     // Initialize duty schema api and add it to the ioc container
     const dutySchemaLocation = path.resolve(this.environment.projectRoot, this.environment.dutySchemaLocation);
     container.bind<DutySchemaApi>(TYPES.DutySchemaApi).toConstantValue(new FsDutySchemaApi(dutySchemaLocation));
+
+    const googleDistanceMatrixApi = new GoogleDistanceMatrixApi(this.environment.googleApiKey);
+    container.bind<TravelApi>(TYPES.TravelApi).toConstantValue(googleDistanceMatrixApi);
 
     // Initialize cache and add it to the ioc container
     container.bind<Cache>(TYPES.Cache).toConstantValue(new Cache(this.environment.cacheTtl));
