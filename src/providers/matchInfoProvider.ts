@@ -6,6 +6,9 @@ import { provide } from '../ioc/iocUtils';
 import TravelApi from '../services/travelApi/travelApi';
 import * as moment from 'moment';
 
+const COUNTRY = 'Netherlands';
+const HOME_LOCATION = { address: 'Lentemorgen 3', zipCode: '6903CT', city: 'Zevenaar', country: COUNTRY };
+
 @provide(TYPES.MatchProvider)
 export default class MatchInfoProvider {
   constructor(
@@ -45,8 +48,8 @@ export default class MatchInfoProvider {
     let additionalMoments;
 
     if (teamId !== matchEntry.homeTeam.id) {
-      const extraTime = moment.duration(30, 'minutes');
-      const desiredArrivalTime = matchEntry.dateTime.add(extraTime);
+      const extraTime = moment.duration(35, 'minutes');
+      const desiredArrivalTime = matchEntry.dateTime.clone().subtract(extraTime);
 
       const travelInfo = await this.getTravelInfo(matchEntry.facility, desiredArrivalTime.unix());
 
@@ -58,19 +61,17 @@ export default class MatchInfoProvider {
     return this.createTimeTable(matchEntry.dateTime, additionalMoments);
   }
 
+  private getTravelInfo(facility: Facility, arrivalTime: number) {
+    const toLocation = { address: facility.address, zipCode: facility.zipCode, city: facility.city, country: COUNTRY };
+
+    return this.travelApi.getTravelInfo(HOME_LOCATION, toLocation, arrivalTime);
+  }
+
   private createTimeTable(playTime: moment.Moment, additionalMinutes: moment.Duration) {
     return {
       play: playTime.unix(),
-      present: playTime.add(moment.duration(additionalMinutes, 'minutes')).unix()
+      present: playTime.clone().subtract(additionalMinutes).unix()
     };
-  }
-
-  private getTravelInfo(facility: Facility, arrivalTime: number) {
-    return this.travelApi.getTravelInfo(
-      { address: 'Lentemorgen 3', zipCode: '6903CT', city: 'Zevenaar', country: 'Netherlands' },
-      { address: facility.address, zipCode: facility.zipCode, city: facility.city, country: 'Netherlands' },
-      arrivalTime
-    );
   }
 
   private createMatch(
