@@ -4,10 +4,10 @@ import * as path from 'path';
 import TYPES from './constants/types';
 import DutySchemaApi from './services/dutySchemaApi/dutySchemeApi';
 import FsDutySchemaApi from './services/dutySchemaApi/fsDutySchemaApi';
-import MatchInfoProvider from './providers/matchInfoProvider';
 import KnkvApi from './services/matchApi/knkvApi';
 import MatchApi from './services/matchApi/matchApi';
 import Cache from './libraries/caching/cache';
+import MatchController from './controllers/matchController';
 
 class Main {
   private app: express.Application;
@@ -46,11 +46,9 @@ class Main {
   }
 
   public onListening() {
-    const matchProvider = this.iocContext.getContainer().get<MatchInfoProvider>(TYPES.MatchProvider);
+    const matchController = this.iocContext.getContainer().get<MatchController>(TYPES.MatchController);
 
-    this.app.get('/matches', async (_request, response) => {
-      response.send(await matchProvider.getMatchesForTeam(this.environment.teamId));
-    });
+    this.app.get('/matches', matchController.getMatches.bind(matchController));
   }
 
   private configureCorsMiddleware() {
