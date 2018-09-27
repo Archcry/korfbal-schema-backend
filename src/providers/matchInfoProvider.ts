@@ -3,25 +3,19 @@ import TYPES from '../constants/types';
 import MatchApi, { MatchApiResponseEntry } from '../services/matchApi/matchApi';
 import DutySchemaApi, { DutySchemaApiResponseEntry } from '../services/dutySchemaApi/dutySchemeApi';
 import { provide } from '../ioc/iocUtils';
-import Cache from '../libraries/caching/cache';
 
 @provide(TYPES.MatchProvider)
 export default class MatchInfoProvider {
   constructor(
     @inject(TYPES.MatchApi) private matchApi: MatchApi,
-    @inject(TYPES.DutySchemaApi) private dutySchemaApi: DutySchemaApi,
-    @inject(TYPES.Cache) private cache: Cache
+    @inject(TYPES.DutySchemaApi) private dutySchemaApi: DutySchemaApi
   ) { }
 
   public async getMatchesForTeam(teamId: number): Promise<Match[]> {
-    const matches = this.cache.get<Match[]>('MatchInfoProvider.matches', async () => {
-      const matchEntries = await this.matchApi.getMatchesForTeam(teamId);
-      const dutySchemaEntries = await this.dutySchemaApi.getDutySchemaEntries();
+    const matchEntries = await this.matchApi.getMatchesForTeam(teamId);
+    const dutySchemaEntries = await this.dutySchemaApi.getDutySchemaEntries();
 
-      return this.combineResults(matchEntries, dutySchemaEntries);
-    });
-
-    return matches;
+    return this.combineResults(matchEntries, dutySchemaEntries);
   }
 
   private combineResults(matchEntries: MatchApiResponseEntry[], dutySchemaEntries: DutySchemaApiResponseEntry[]) {

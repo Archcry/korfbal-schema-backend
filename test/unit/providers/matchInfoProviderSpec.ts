@@ -5,7 +5,6 @@ import * as moment from 'moment';
 import MatchInfoProvider from '../../../src/providers/matchInfoProvider';
 import MatchApi, { MatchApiResponseEntry } from '../../../src/services/matchApi/matchApi';
 import DutySchemaApi, { DutySchemaApiResponseEntry } from '../../../src/services/dutySchemaApi/dutySchemeApi';
-import Cache from '../../../src/libraries/caching/cache';
 
 describe('MatchInfoProvider', () => {
   const sandbox = sinon.createSandbox();
@@ -13,7 +12,6 @@ describe('MatchInfoProvider', () => {
 
   let matchApiStub: sinon.SinonStubbedInstance<MatchApi>;
   let dutySchemaApiStub: sinon.SinonStubbedInstance<DutySchemaApi>;
-  let cacheGetSpy: sinon.SinonSpy;
 
   let subjectUnderTest: MatchInfoProvider;
 
@@ -29,10 +27,7 @@ describe('MatchInfoProvider', () => {
     matchApiStub.getMatchesForTeam.returns(Promise.resolve(matchApiFakeResponse));
     dutySchemaApiStub.getDutySchemaEntries.returns(Promise.resolve(dutySchemaApiFakeResponse));
 
-    const cache = new Cache(3600);
-    cacheGetSpy = sandbox.spy(cache, 'get');
-
-    subjectUnderTest = new MatchInfoProvider(matchApiStub, dutySchemaApiStub, cache);
+    subjectUnderTest = new MatchInfoProvider(matchApiStub, dutySchemaApiStub);
   });
 
   afterEach(() => sandbox.restore());
@@ -52,12 +47,6 @@ describe('MatchInfoProvider', () => {
   it('should fetch travelinformation based on a fixed from address');
 
   it('should only fetch travel information for matches that are not played at home');
-
-  it('should use the cache to retrieve matches', async () => {
-    await subjectUnderTest.getMatchesForTeam(teamId);
-
-    assert(cacheGetSpy.calledWith('MatchInfoProvider.matches'));
-  });
 
   it('should combine all fetched data in an CombinedMatchInfo object', async () => {
     const matches = await subjectUnderTest.getMatchesForTeam(teamId);
