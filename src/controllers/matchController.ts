@@ -3,7 +3,9 @@ import Cache from '../libraries/caching/cache';
 import MatchInfoProvider from '../providers/matchInfoProvider';
 import { inject } from 'inversify';
 import TYPES from '../constants/types';
+import { provide } from '../ioc/iocUtils';
 
+@provide(TYPES.MatchController)
 export default class MatchController {
   public constructor(
     @inject(TYPES.Cache) private cache: Cache,
