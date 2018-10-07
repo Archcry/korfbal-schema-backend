@@ -1,5 +1,6 @@
 import TravelApi, { TravelApiResponseEntry, Location } from './travelApi';
 import fetch from 'node-fetch';
+import * as moment from 'moment-timezone';
 
 export default class GoogleDistanceMatrixApi implements TravelApi {
   private static API_URL = 'https://maps.googleapis.com/maps/api/distancematrix/json';
@@ -38,7 +39,10 @@ export default class GoogleDistanceMatrixApi implements TravelApi {
   private async determineDepartureTime(resourceUrl: string, arrivalTime: number) {
     const element = await this.fetchDistanceMatrix(resourceUrl.concat(`&arrival_time=${arrivalTime}`));
 
-    return arrivalTime - element.duration.value;
+    const currentTime = moment.tz('Europe/Amsterdam').unix();
+    const departureTime = arrivalTime - element.duration.value;
+
+    return (departureTime > currentTime) ? departureTime : currentTime;
   }
 
   private async fetchTravelInfo(resourceUrl: string, departureTime: number) {
