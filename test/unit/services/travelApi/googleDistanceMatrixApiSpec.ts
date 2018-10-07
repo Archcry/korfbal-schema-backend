@@ -5,6 +5,7 @@ import customSinonMatchers from '../../helpers/customSinonMatchers';
 import GoogleDistanceMatrixApi from '../../../../src/services/travelApi/googleDistanceMatrixApi';
 import TravelApi from '../../../../src/services/travelApi/travelApi';
 import { travelResponseWithoutTraffic, travelResponseWithTraffic } from './exampleResponse';
+import * as moment from 'moment';
 
 describe('GoogleDistanceMatrixApi', () => {
   const sandbox = sinon.createSandbox();
@@ -12,7 +13,7 @@ describe('GoogleDistanceMatrixApi', () => {
   const apiKey = 'AIzaSyBACMTtJB2ha-Ubr7-bDF1z80t2p09YbRA';
 
   // Some random values, don't worry about it
-  const arrivalTime = 1537894245;
+  const arrivalTime = moment().add(moment.duration(1, 'day')).unix();
   const travelDuration = 1621;
   const travelDistance = 22043;
   const extraTravelDuration = 300;
@@ -82,7 +83,17 @@ describe('GoogleDistanceMatrixApi', () => {
     assert(fetchStub.firstCall.calledWith(matcher), 'the first call to the api should include the arrival time');
   });
 
-  it('should call fetch once with departure time, based on the previous result, as query parameter', async () => {
+  it('should call fetch once with a determined departuretime from the previous fetch call', async () => {
+    const arrivalTimeInThePast = moment().subtract(moment.duration(1, 'day')).unix();
+
+    await subjectUnderTest.getTravelInfo(fromLocation, toLocation, arrivalTimeInThePast);
+
+    const expectedDepartureTime = moment().unix();
+    const matcher = customSinonMatchers.string.contains(`&departure_time=${expectedDepartureTime}`);
+    assert(fetchStub.secondCall.calledWith(matcher), 'api should\'ve been called with the calculated departureTime');
+  });
+
+  it('should call fetch once with departure time "now" when the determined departuretime is in the past', async () => {
     await subjectUnderTest.getTravelInfo(fromLocation, toLocation, arrivalTime);
 
     const expectedDepartureTime = arrivalTime - travelDuration;
