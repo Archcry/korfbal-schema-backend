@@ -1,5 +1,5 @@
 import MatchApi, { MatchApiResponseEntry, Team, Facility } from './matchApi';
-import fetch from 'node-fetch';
+import fetch from '../../libraries/fetch/fetch';
 import * as moment from 'moment-timezone';
 
 export default class KnkvApi implements MatchApi {

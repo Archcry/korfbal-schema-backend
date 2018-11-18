@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import KnkvApi from '../../../../src/services/matchApi/knkvApi';
 import * as sinon from 'sinon';
-import * as fetch from 'node-fetch';
+import * as fetch from '../../../../src/libraries/fetch/fetch';
 import { assert, expect } from 'chai';
 import knkvSampleResponse from './knkvSampleResponse';
 import customSinonMatchers from '../../helpers/customSinonMatchers';
