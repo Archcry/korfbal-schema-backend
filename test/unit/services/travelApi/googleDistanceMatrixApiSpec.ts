@@ -1,5 +1,5 @@
 import * as sinon from 'sinon';
-import * as fetch from '../../../../src/libraries/fetch/fetch';
+import * as fetch from 'node-fetch';
 import { assert, expect } from 'chai';
 import customSinonMatchers from '../../helpers/customSinonMatchers';
 import GoogleDistanceMatrixApi from '../../../../src/services/travelApi/googleDistanceMatrixApi';

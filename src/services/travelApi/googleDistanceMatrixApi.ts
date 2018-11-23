@@ -1,5 +1,5 @@
 import TravelApi, { TravelApiResponseEntry, Location } from './travelApi';
-import fetch from '../../libraries/fetch/fetch';
+import fetch from 'node-fetch';
 import * as moment from 'moment-timezone';
 
 export default class GoogleDistanceMatrixApi implements TravelApi {
