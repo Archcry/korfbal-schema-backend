@@ -20,6 +20,11 @@
     "wash": ["Sander"]
   },
   {
+    "gameId": 50776,
+    "drive": ["Mitchell", "Luuk", "Sander"],
+    "wash": ["Sander"]
+  },
+  {
     "gameId": 24562,
     "drive": [],
     "wash": ["Luuk"]
