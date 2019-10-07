@@ -9,8 +9,8 @@ import * as moment from 'moment';
 
 describe('GoogleDistanceMatrixApi', () => {
   const sandbox = sinon.createSandbox();
-  const apiUrl = 'https://maps.googleapis.com/maps/api/distancematrix/json';
-  const apiKey = 'AIzaSyBACMTtJB2ha-Ubr7-bDF1z80t2p09YbRA';
+  const apiUrl = '';
+  const apiKey = '';
 
   // Some random values, don't worry about it
   const arrivalTime = moment().add(moment.duration(1, 'day')).unix();
