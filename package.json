@@ -26,6 +26,7 @@
     "@types/node-cache": "^4.1.1",
     "@types/node-fetch": "^2.1.2",
     "@types/sinon": "5.0.5",
+    "@types/moment-timezone": "^0.5.9",
     "chai": "^4.1.2",
     "mocha": "^5.2.0",
     "nyc": "^13.0.1",
@@ -41,10 +42,10 @@
     "typescript": "^3.0.3"
   },
   "dependencies": {
-    "@types/moment-timezone": "^0.5.9",
     "express": "^4.15.2",
     "inversify": "^4.13.0",
     "inversify-binding-decorators": "^4.0.0",
+    "knkv-ical": "^0.1.1",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.21",
     "node-cache": "^4.2.0",

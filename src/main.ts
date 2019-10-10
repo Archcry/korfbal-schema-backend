@@ -4,8 +4,6 @@ import * as path from 'path';
 import TYPES from './constants/types';
 import DutySchemaApi from './services/dutySchemaApi/dutySchemeApi';
 import FsDutySchemaApi from './services/dutySchemaApi/fsDutySchemaApi';
-import KnkvApi from './services/matchApi/knkvApi';
-import MatchApi from './services/matchApi/matchApi';
 import Cache from './libraries/caching/cache';
 import MatchController from './controllers/matchController';
 import TravelApi from './services/travelApi/travelApi';
@@ -37,7 +35,7 @@ class Main {
     container.bind(TYPES.Console).toConstantValue(global.console);
 
     // Initialize match api and add it to the ioc container
-    container.bind<MatchApi>(TYPES.MatchApi).toConstantValue(new KnkvApi(this.environment.knkvApiKey));
+    // container.bind<MatchApi>(TYPES.MatchApi).toConstantValue(new KnkvApi(this.environment.knkvApiKey));
 
     // Initialize duty schema api and add it to the ioc container
     const dutySchemaLocation = path.resolve(this.environment.projectRoot, this.environment.dutySchemaLocation);

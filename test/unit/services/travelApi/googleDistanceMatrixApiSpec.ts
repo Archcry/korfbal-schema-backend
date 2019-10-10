@@ -65,14 +65,14 @@ describe('GoogleDistanceMatrixApi', () => {
   it('should include the from location in the request to the google distance matrix api', async () => {
     await subjectUnderTest.getTravelInfo(fromLocation, toLocation, arrivalTime);
 
-    const matcher = customSinonMatchers.string.contains('&origins=Marconistraat 18, 6902 PC Zevenaar, Netherlands');
+    const matcher = customSinonMatchers.string.contains(`&origins=${fromLocation}`);
     assert(fetchStub.alwaysCalledWith(matcher), 'all calls to the api should include the origin');
   });
 
   it('should include the to location in the request to the google distance matrix api', async () => {
     await subjectUnderTest.getTravelInfo(fromLocation, toLocation, arrivalTime);
 
-    const matcher = customSinonMatchers.string.contains('&destinations=Kolonieweg 2, 6952 GX Dieren, Netherlands');
+    const matcher = customSinonMatchers.string.contains(`&destinations=${toLocation}`);
     assert(fetchStub.alwaysCalledWith(matcher), 'all calls to the api should include the destination');
   });
 

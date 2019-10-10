@@ -42,7 +42,7 @@ describe('MatchController', () => {
     await subjectUnderTest.getMatches({} as any, response);
 
     const assertionError = 'matchProvider should\'ve been called with teamId';
-    assert(matchInfoProviderStub.getMatchesForTeam.calledOnceWith(environment.teamId), assertionError);
+    assert(matchInfoProviderStub.getMatchesForToken.calledOnceWith(environment.teamId), assertionError);
   });
 
   it('should send the response with the matches', async () => {

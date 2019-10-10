@@ -15,7 +15,7 @@ export default class MatchController {
 
   public async getMatches(_request: Request, response: Response): Promise<void> {
     const result = await this.cache.get('MatchProvider.matches', async () => {
-      return await this.matchInfoProvider.getMatchesForTeam(this.environment.teamId);
+      return await this.matchInfoProvider.getMatchesForToken(this.environment.teamId);
     });
 
     response.send(result);
