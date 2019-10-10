@@ -1,4 +1,4 @@
-import TravelApi, { TravelApiResponseEntry, Location } from './travelApi';
+import TravelApi, { TravelApiResponseEntry } from './travelApi';
 import fetch from 'node-fetch';
 import * as moment from 'moment-timezone';
 
@@ -9,9 +9,9 @@ export default class GoogleDistanceMatrixApi implements TravelApi {
     private apiKey: string
   ) { }
 
-  public async getTravelInfo(from: Location, to: Location, arrivalTime: number): Promise<TravelApiResponseEntry> {
+  public async getTravelInfo(from: string, to: string, arrivalTime: number): Promise<TravelApiResponseEntry> {
     try {
-      const resourceUrl = this.createRequestUrl(this.createStringLocation(from), this.createStringLocation(to));
+      const resourceUrl = this.createRequestUrl(from, to);
 
       const departureTime = await this.determineDepartureTime(resourceUrl, arrivalTime);
       const result = await this.fetchTravelInfo(resourceUrl, departureTime);
@@ -20,10 +20,6 @@ export default class GoogleDistanceMatrixApi implements TravelApi {
     } catch (err) {
       throw new Error(`Could not fetch travel information: ${err}`);
     }
-  }
-
-  private createStringLocation(location: Location) {
-    return `${location.address}, ${location.zipCode} ${location.city}, ${location.country}`;
   }
 
   private createRequestUrl(originString: string, destinationString: string) {
@@ -60,7 +56,7 @@ export default class GoogleDistanceMatrixApi implements TravelApi {
       .then(responseObj => responseObj.rows[0].elements[0]);
   }
 
-  private createTravelApiResponseEntry(from: Location, to: Location, distance: number, duration: number) {
+  private createTravelApiResponseEntry(from: string, to: string, distance: number, duration: number) {
     return {
       fromLocation: from,
       toLocation: to,

@@ -17,8 +17,8 @@ describe('GoogleDistanceMatrixApi', () => {
   const travelDuration = 1621;
   const travelDistance = 22043;
   const extraTravelDuration = 300;
-  const fromLocation = { city: 'Zevenaar', address: 'Marconistraat 18', zipCode: '6902 PC', country: 'Netherlands' };
-  const toLocation = { city: 'Dieren', address: 'Kolonieweg 2', zipCode: '6952 GX', country: 'Netherlands' };
+  const fromLocation = 'Breezandpad 13, 6843 JM Arnhem';
+  const toLocation = 'Sportpark Tuilland Buurtweg 3 3941MC DOORN';
 
   let fetchStub: sinon.SinonStub;
 

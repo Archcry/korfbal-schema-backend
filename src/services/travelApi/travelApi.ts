@@ -1,17 +1,10 @@
 export default interface TravelApi {
-  getTravelInfo(from: Location, to: Location, arrivalTime: number): Promise<TravelApiResponseEntry>;
-}
-
-export interface Location {
-  address: string;
-  zipCode: string;
-  city: string;
-  country: string;
+  getTravelInfo(from: string, to: string, arrivalTime: number): Promise<TravelApiResponseEntry>;
 }
 
 export interface TravelApiResponseEntry {
-  fromLocation: Location;
-  toLocation: Location;
+  fromLocation: string;
+  toLocation: string;
   distance: number;
   duration: number;
 }
