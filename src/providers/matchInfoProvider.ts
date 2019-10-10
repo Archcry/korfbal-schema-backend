@@ -17,8 +17,8 @@ export default class MatchInfoProvider {
     @inject(TYPES.TravelApi) private travelApi: TravelApi
   ) { }
 
-  public async getMatchesForTeam(teamId: number): Promise<Match[]> {
-    const matchEntries = await this.matchApi.getMatchesForTeam(teamId);
+  public async getMatchesForTeam(token: string): Promise<Match[]> {
+    const matchEntries = await this.matchApi.getMatchesForToken(token);
     const dutySchemaEntries = await this.dutySchemaApi.getDutySchemaEntries();
 
     return this.combineResults(matchEntries, dutySchemaEntries, teamId);

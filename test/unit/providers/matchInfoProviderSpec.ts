@@ -23,7 +23,7 @@ describe('MatchInfoProvider', () => {
 
   beforeEach(() => {
     matchApiStub = {
-      getMatchesForTeam: sandbox.stub()
+      getMatchesForToken: sandbox.stub()
     };
 
     dutySchemaApiStub = {
@@ -34,7 +34,7 @@ describe('MatchInfoProvider', () => {
       getTravelInfo: sandbox.stub()
     };
 
-    matchApiStub.getMatchesForTeam.returns(Promise.resolve(matchApiFakeResponse));
+    matchApiStub.getMatchesForToken.returns(Promise.resolve(matchApiFakeResponse));
     dutySchemaApiStub.getDutySchemaEntries.returns(Promise.resolve(dutySchemaApiFakeResponse));
     travelApiStub.getTravelInfo.returns(Promise.resolve({ distance: 1000, duration: driveTime }));
 
@@ -46,7 +46,7 @@ describe('MatchInfoProvider', () => {
   it('should fetch match information using the match api', async () => {
     await subjectUnderTest.getMatchesForTeam(teamId);
 
-    assert(matchApiStub.getMatchesForTeam.calledWith(teamId), `matchApi not called with teamId: "${teamId}"`);
+    assert(matchApiStub.getMatchesForToken.calledWith(teamId), `matchApi not called with teamId: "${teamId}"`);
   });
 
   it('should fetch dutySchema information using the dutySchemaApi', async () => {
